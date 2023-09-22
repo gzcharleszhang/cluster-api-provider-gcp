@@ -156,6 +156,9 @@ func (s *ManagedMachinePoolScope) NodePoolVersion() *string {
 // NodePoolResourceLabels returns the resource labels of the node pool.
 func NodePoolResourceLabels(additionalLabels infrav1.Labels, clusterName string) infrav1.Labels {
 	resourceLabels := additionalLabels.DeepCopy()
+	if resourceLabels == nil {
+		resourceLabels = infrav1.Labels{}
+	}
 	resourceLabels[infrav1.ClusterTagKey(clusterName)] = string(infrav1.ResourceLifecycleOwned)
 	return resourceLabels
 }

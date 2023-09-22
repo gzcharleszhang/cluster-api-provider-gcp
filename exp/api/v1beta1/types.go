@@ -95,6 +95,9 @@ func ConvertToSdkAutoscaling(autoscaling *NodePoolAutoScaling) *containerpb.Node
 	}
 	if autoscaling.LocationPolicy != nil {
 		sdkAutoscaling.LocationPolicy = convertToSdkLocationPolicy(*autoscaling.LocationPolicy)
+	} else if sdkAutoscaling.Enabled {
+		// if location policy is not specified and autoscaling is enabled, default location policy to "any"
+		sdkAutoscaling.LocationPolicy = convertToSdkLocationPolicy(ManagedNodePoolLocationPolicyAny)
 	}
 
 	return &sdkAutoscaling
