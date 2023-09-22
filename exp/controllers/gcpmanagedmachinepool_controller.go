@@ -302,6 +302,7 @@ func (r *GCPManagedMachinePoolReconciler) Reconcile(ctx context.Context, req ctr
 	// Always close the scope when exiting this function so we can persist any GCPMachine changes.
 	defer func() {
 		if err := managedMachinePoolScope.Close(); err != nil && reterr == nil {
+			log.Error(err, "Failed to patch GCPManagedMachinePool object", "GCPManagedMachinePool", managedMachinePoolScope.GCPManagedMachinePool.Name)
 			reterr = err
 		}
 	}()
@@ -315,7 +316,7 @@ func (r *GCPManagedMachinePoolReconciler) Reconcile(ctx context.Context, req ctr
 	return r.reconcile(ctx, managedMachinePoolScope)
 }
 
-func (r *GCPManagedMachinePoolReconciler) reconcile(ctx context.Context, managedMachinePoolScope *scope.ManagedMachinePoolScope) (ctrl.Result, error) {
+func (r *GCPManagedMachinePoolReconciler) reconcile(ctx context.Context, managedMachinePoolScope *scope.ManagedMachinePoolScope) (res ctrl.Result, reterr error) {
 	log := log.FromContext(ctx).WithValues("controller", "gcpmanagedmachinepool")
 	log.Info("Reconciling GCPManagedMachinePool")
 

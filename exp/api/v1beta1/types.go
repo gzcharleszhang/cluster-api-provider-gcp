@@ -63,3 +63,39 @@ func ConvertToSdkTaint(taints Taints) []*containerpb.NodeTaint {
 	}
 	return res
 }
+
+// convertToSdkLocationPolicy converts node pool autoscaling location policy to a value that is used by GCP SDK.
+func convertToSdkLocationPolicy(locationPolicy ManagedNodePoolLocationPolicy) containerpb.NodePoolAutoscaling_LocationPolicy {
+	switch locationPolicy {
+	case ManagedNodePoolLocationPolicyBalanced:
+		return containerpb.NodePoolAutoscaling_BALANCED
+	case ManagedNodePoolLocationPolicyAny:
+		return containerpb.NodePoolAutoscaling_ANY
+	}
+	return containerpb.NodePoolAutoscaling_LOCATION_POLICY_UNSPECIFIED
+}
+
+// ConvertToSdkAutoscaling converts node pool autoscaling config to a value that is used by GCP SDK.
+func ConvertToSdkAutoscaling(autoscaling *NodePoolAutoScaling) *containerpb.NodePoolAutoscaling {
+	if autoscaling == nil {
+		return nil
+	}
+	sdkAutoscaling := containerpb.NodePoolAutoscaling{
+		Enabled: true, // enable autoscaling by default
+	}
+	// set fields
+	if autoscaling.MinCount != nil {
+		sdkAutoscaling.TotalMinNodeCount = *autoscaling.MinCount
+	}
+	if autoscaling.MaxCount != nil {
+		sdkAutoscaling.TotalMaxNodeCount = *autoscaling.MaxCount
+	}
+	if autoscaling.EnableAutoscaling != nil {
+		sdkAutoscaling.Enabled = *autoscaling.EnableAutoscaling
+	}
+	if autoscaling.LocationPolicy != nil {
+		sdkAutoscaling.LocationPolicy = convertToSdkLocationPolicy(*autoscaling.LocationPolicy)
+	}
+
+	return &sdkAutoscaling
+}
