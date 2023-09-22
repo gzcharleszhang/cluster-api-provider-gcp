@@ -157,7 +157,7 @@ func (s *Service) Reconcile(ctx context.Context) (ctrl.Result, error) {
 
 	needUpdateAutoscaling, setNodePoolAutoscalingRequest := s.checkDiffAndPrepareUpdateAutoscaling(nodePool)
 	if needUpdateAutoscaling {
-		log.Info("Auto scaling update required", "request", setNodePoolAutoscalingRequest, "existing", nodePool.Autoscaling, "desired", infrav1exp.ConvertToSdkAutoscaling(s.scope.GCPManagedMachinePool.Spec.Scaling))
+		log.Info("Auto scaling update required")
 		err = s.updateNodePoolAutoscaling(ctx, setNodePoolAutoscalingRequest)
 		if err != nil {
 			return ctrl.Result{}, err
@@ -169,7 +169,7 @@ func (s *Service) Reconcile(ctx context.Context) (ctrl.Result, error) {
 
 	needUpdateSize, setNodePoolSizeRequest := s.checkDiffAndPrepareUpdateSize(nodePool)
 	if needUpdateSize {
-		log.Info("Size update required", "request", setNodePoolSizeRequest, "existing", nodePool.InitialNodeCount)
+		log.Info("Size update required")
 		err = s.updateNodePoolSize(ctx, setNodePoolSizeRequest)
 		if err != nil {
 			return ctrl.Result{}, err
