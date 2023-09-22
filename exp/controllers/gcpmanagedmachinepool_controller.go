@@ -316,7 +316,7 @@ func (r *GCPManagedMachinePoolReconciler) Reconcile(ctx context.Context, req ctr
 	return r.reconcile(ctx, managedMachinePoolScope)
 }
 
-func (r *GCPManagedMachinePoolReconciler) reconcile(ctx context.Context, managedMachinePoolScope *scope.ManagedMachinePoolScope) (res ctrl.Result, reterr error) {
+func (r *GCPManagedMachinePoolReconciler) reconcile(ctx context.Context, managedMachinePoolScope *scope.ManagedMachinePoolScope) (ctrl.Result, error) {
 	log := log.FromContext(ctx).WithValues("controller", "gcpmanagedmachinepool")
 	log.Info("Reconciling GCPManagedMachinePool")
 

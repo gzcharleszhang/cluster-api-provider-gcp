@@ -44,6 +44,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
+// setReadyStatusFromConditions updates the GCPManagedMachinePool's ready status based on its conditions
 func (s *Service) setReadyStatusFromConditions() {
 	machinePool := s.scope.GCPManagedMachinePool
 	if conditions.IsTrue(machinePool, clusterv1.ReadyCondition) || conditions.IsTrue(machinePool, infrav1exp.GKEMachinePoolUpdatingCondition) {
